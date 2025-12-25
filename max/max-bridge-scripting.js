@@ -209,10 +209,11 @@ function valuechanged(data) {
     // post("VALUE CHANGED: " + name + " -> " + v + "\n");
 
     let obj = {
+        cmd: "maxParamUpdate",
         param: name, 
         value: v
     }
-    outlet(0, 'paramUpdate', obj);
+    outlet(0, 'paramUpdate', JSON.stringify(obj));
 }
 
 
@@ -306,4 +307,129 @@ function anything() {
     }
 
     setParamValue(paramName, value);
+}
+
+
+// ------------------------------
+// 4b) APPLY MANY PARAM VALUES AT ONCE
+// ------------------------------
+//
+// From Max you can call either:
+//   applyjson <json-string>
+//   apply <dict-or-object>   (if passing an actual JS object reference)
+//
+// Examples:
+//   [message] applyjson {"slider":50,"slider[1]":28,"multislider":[0.1,0.2,0.3,0.4]}
+//   [message] apply {"slider":50,"slider[1]":28}
+//
+// Notes:
+// - Keys must match the param names from ParameterInfoProvider.getnames()
+// - Values can be number, string, or array/list
+
+function applyjson() {
+    if (arguments.length < 1) {
+        post("usage: applyjson <json-string>\n");
+        return;
+    }
+
+    // If you send a JSON string with spaces, Max may split it into tokens.
+    // Re-join everything into one string.
+    var jsonStr = arrayfromargs(arguments).join(" ");
+
+    var obj = null;
+    try {
+        obj = JSON.parse(jsonStr);
+    } catch (e) {
+        post("applyjson: JSON.parse failed: " + e + "\n");
+        return;
+    }
+
+    applyObject(obj);
+}
+
+// If you can pass an actual JS object into this function (less common),
+// this will work too.
+function apply(obj) {
+    applyObject(obj);
+}
+
+function applyObject(obj) {
+    if (!obj || typeof obj !== "object") {
+        post("applyObject: expected an object\n");
+        return;
+    }
+
+    var keys = Object.keys(obj);
+
+    // Optional: deterministic order
+    keys.sort();
+
+    for (var i = 0; i < keys.length; i++) {
+        var paramName = keys[i];
+        var value = obj[paramName];
+
+        // If the sender gave us a typed array or something array-like,
+        // normalize to a plain Array.
+        if (value && typeof value === "object" && typeof value.length === "number" && !Array.isArray(value)) {
+            value = Array.prototype.slice.call(value);
+        }
+
+        setParamValue(paramName, value);
+    }
+}
+
+// ------------------------------
+// 5) APPLY MANY PARAM CHANGES
+// ------------------------------
+//
+// Accepts either:
+//   - a Dict name (string), e.g. applydict myParams
+//   - or a JS object (if you call it internally)
+//
+// It will set each key -> value using your existing setParamValue().
+
+function applydict(dictName) {
+    try {
+        var d = new Dict(dictName);
+        var keys = d.getkeys(); // array of keys, or null if empty
+
+        if (!keys || !keys.length) {
+            post("applydict: dict is empty or missing keys.\n");
+            return;
+        }
+
+        for (var i = 0; i < keys.length; i++) {
+            var k = keys[i];
+            var v = d.get(k); // value for that key
+            setParamValue(k, v);
+        }
+    } catch (e) {
+        post("applydict failed: " + e + "\n");
+    }
+}
+
+
+function applyParamObject(obj) {
+    if (!obj || typeof obj !== "object") {
+        post("applyParamObject: expected an object\n");
+        return;
+    }
+
+    var keys = Object.keys(obj);
+
+    // Optional: you can guard against feedback loops:
+    // - set listeners silent while applying
+    // - or just rely on your l.silent usage in setParamValue
+    for (var i = 0; i < keys.length; i++) {
+        var paramName = keys[i];
+        var value = obj[paramName];
+
+        // If your dict contains nested objects, skip or handle here
+        if (value && typeof value === "object" && !Array.isArray(value)) {
+            post("Skipping nested object param '" + paramName + "'\n");
+            continue;
+        }
+        post(paramName, value)
+        setParamValue(paramName, value);
+    }
 }

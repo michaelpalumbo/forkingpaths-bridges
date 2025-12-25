@@ -12,16 +12,27 @@ const ws = new WebSocket("ws://localhost:3001");
 ws.on("open", () => {
   console.log("✅ Connected to WebSocket server on port 3001");
 
-  // Send a test message
-  ws.send(JSON.stringify({
-    type: "hello",
-    payload: "Client connected"
-  }));
+
 });
 
 // Fired when a message is received
 ws.on("message", (data) => {
-  console.log("📩 Message from server:", data.toString());
+  // console.log("📩 Message from server:", data.toString());
+  let msg = JSON.parse(data)
+  
+
+  switch(msg.cmd){
+    case 'maxStateRecall':
+      Max.post(msg)
+      Max.setDict("paramRecalls", msg.data);
+      Max.outlet("applydict", "paramRecalls");
+
+      // sendParamBatch(msg.data);
+      
+    break;
+
+    default: console.log('no switch case for msg', msg.cmd)
+  }
 });
 
 // Fired on error
@@ -37,7 +48,7 @@ ws.on("close", (code, reason) => {
 
 
 // This will be printed directly to the Max console
-Max.post(`Loaded the ${path.basename(__filename)} script`);
+// Max.post(`Loaded the ${path.basename(__filename)} script`);
 
 // Use the 'addHandler' function to register a function for a particular message
 Max.addHandler("bang", () => {
@@ -46,6 +57,25 @@ Max.addHandler("bang", () => {
 
 // Use the 'outlet' function to send messages out of node.script's outlet
 Max.addHandler("paramUpdate", (msg) => {
-	Max.post(msg);
+	// Max.post(msg);
+
+  ws.send(msg);
 });
 
+
+
+
+// async function sendParamBatch(updates) {
+  
+//   // updates is a normal JS object like:
+//   // { "multislider": [ ... ], "slider": 50, "slider[1]": 28 }
+
+//   // Write into a named Max dict
+//   await 
+
+  
+
+//   // Tell the v8 js object to apply it
+//   // (assuming you patch the node.script outlet to the v8 object's inlet)
+  
+// }
