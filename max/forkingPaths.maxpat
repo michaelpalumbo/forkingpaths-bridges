@@ -13,13 +13,47 @@
         "boxes": [
             {
                 "box": {
+                    "id": "obj-5",
+                    "linecount": 4,
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 826.5, 315.0, 151.0, 60.0 ],
+                    "presentation_linecount": 4,
+                    "text": "Post-docs: ask Joel about doing one at uVic on FP2. Maybe show him what you've achieved? "
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-4",
+                    "linecount": 14,
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 898.0, 42.0, 150.0, 194.0 ],
+                    "presentation_linecount": 14,
+                    "text": "this is WAY down the line, but consider be able to add multiple instances of the fp. objects (and other bridges for other apps) and have the FP2 app be able to either handle them altogether, or view their changes as separate graphs. would need to some finessing esp if they don't have all bridges open from a previous session, etc.  "
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-3",
+                    "linecount": 15,
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 731.0, 42.0, 150.0, 208.0 ],
+                    "text": "think of a naming scheme for the package patchers:\n\nsomething like fp.\n\nso fp.param = for this one here\n\nfp.patch = for the one that can observe and recall patcher edits\n\nand maybe a .8 suffix for max-8-compatible ones\netc. "
+                }
+            },
+            {
+                "box": {
                     "id": "obj-20",
                     "linecount": 4,
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
                     "patching_rect": [ 569.0, 42.0, 151.0, 60.0 ],
-                    "presentation_linecount": 4,
                     "text": "TODO: eventually release this as a max package (talk to graham about having him try it out?)"
                 }
             },
@@ -31,7 +65,6 @@
                     "numinlets": 1,
                     "numoutlets": 0,
                     "patching_rect": [ 409.0, 42.0, 151.0, 127.0 ],
-                    "presentation_linecount": 9,
                     "text": "TODO: eventually, see about writing a v8 script that observes all changes made to a Patcher. if you can get that to work, then fuck it, you could add forking paths-style version control to a fucking max patch"
                 }
             },
@@ -42,7 +75,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 232.5, 69.0, 150.0, 100.0 ],
+                    "patching_rect": [ 232.5, 69.0, 151.0, 100.0 ],
                     "text": "TODO: with this implementation, you can also write a Max 8 version as well (using [js] object instead. love that this project can be backwards compatible)"
                 }
             },
@@ -53,7 +86,7 @@
                     "numinlets": 1,
                     "numoutlets": 1,
                     "outlettype": [ "bang" ],
-                    "patching_rect": [ 903.0, 151.0, 58.0, 22.0 ],
+                    "patching_rect": [ 654.0, 417.0, 58.0, 22.0 ],
                     "text": "loadbang"
                 }
             },
@@ -63,7 +96,7 @@
                     "maxclass": "dict.view",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 903.0, 221.0, 232.0, 121.0 ]
+                    "patching_rect": [ 654.0, 487.0, 232.0, 121.0 ]
                 }
             },
             {
@@ -73,7 +106,7 @@
                     "numinlets": 2,
                     "numoutlets": 5,
                     "outlettype": [ "dictionary", "", "", "", "" ],
-                    "patching_rect": [ 903.0, 186.0, 104.0, 22.0 ],
+                    "patching_rect": [ 654.0, 452.0, 104.0, 22.0 ],
                     "saved_object_attributes": {
                         "legacy": 0,
                         "parameter_enable": 0,
@@ -166,8 +199,6 @@
                     "saved_object_attributes": {
                         "autostart": 0,
                         "defer": 0,
-                        "node_bin_path": "",
-                        "npm_bin_path": "",
                         "watch": 1
                     },
                     "text": "node.script max-bridge.js @watch 1",
@@ -186,7 +217,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 17.0, 15.0, 152.0, 208.0 ],
+                    "patching_rect": [ 17.0, 15.0, 155.0, 208.0 ],
                     "text": "HOW TO USE:\n\n1. drop this object into any max patch\n2. select the UI objects in your patch that you want to expose to Forking Paths by:\n\n2.1. Open the inspector for a given UI object. \n2.2. Set \"Parameter Mode Enable\" to true\n2.3. repeat for all desired UI objects"
                 }
             },
@@ -238,11 +269,11 @@
                 "box": {
                     "comment": "",
                     "id": "obj-31",
-                    "index": 1,
+                    "index": 0,
                     "maxclass": "inlet",
                     "numinlets": 0,
                     "numoutlets": 1,
-                    "outlettype": [ "bang" ],
+                    "outlettype": [ "" ],
                     "patching_rect": [ 235.0, 288.0, 30.0, 30.0 ]
                 }
             },
@@ -343,6 +374,7 @@
                 }
             }
         ],
+        "autosave": 0,
         "oscreceiveudpport": 0
     }
 }
