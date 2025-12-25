@@ -9,8 +9,43 @@
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ 1458.0, 565.0, 1226.0, 917.0 ],
+        "rect": [ 1177.0, 549.0, 1226.0, 917.0 ],
         "boxes": [
+            {
+                "box": {
+                    "id": "obj-20",
+                    "linecount": 4,
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 569.0, 42.0, 151.0, 60.0 ],
+                    "presentation_linecount": 4,
+                    "text": "TODO: eventually release this as a max package (talk to graham about having him try it out?)"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-19",
+                    "linecount": 9,
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 409.0, 42.0, 151.0, 127.0 ],
+                    "presentation_linecount": 9,
+                    "text": "TODO: eventually, see about writing a v8 script that observes all changes made to a Patcher. if you can get that to work, then fuck it, you could add forking paths-style version control to a fucking max patch"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-18",
+                    "linecount": 7,
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 232.5, 69.0, 150.0, 100.0 ],
+                    "text": "TODO: with this implementation, you can also write a Max 8 version as well (using [js] object instead. love that this project can be backwards compatible)"
+                }
+            },
             {
                 "box": {
                     "id": "obj-15",
@@ -54,7 +89,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 719.0, 503.5, 150.0, 47.0 ],
+                    "patching_rect": [ 232.5, 15.0, 150.0, 47.0 ],
                     "text": "TODO; need re-connecting ws for node script"
                 }
             },
@@ -65,7 +100,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 951.0, 706.0, 150.0, 60.0 ],
+                    "patching_rect": [ 827.0, 615.0, 150.0, 60.0 ],
                     "text": "<<< todo once project is ready: make install script and run it just once on user's computer"
                 }
             },
@@ -76,19 +111,8 @@
                     "numinlets": 1,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 778.0, 706.0, 171.0, 22.0 ],
+                    "patching_rect": [ 654.0, 615.0, 171.0, 22.0 ],
                     "text": "loadmess script npm install ws"
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-4",
-                    "maxclass": "message",
-                    "numinlets": 2,
-                    "numoutlets": 1,
-                    "outlettype": [ "" ],
-                    "patching_rect": [ 257.0, 479.0, 64.0, 22.0 ],
-                    "text": "script start"
                 }
             },
             {
@@ -107,7 +131,7 @@
                     "numoutlets": 1,
                     "offset": [ 0.0, 0.0 ],
                     "outlettype": [ "bang" ],
-                    "patching_rect": [ 359.0, 607.0, 400.0, 220.0 ],
+                    "patching_rect": [ 235.0, 516.0, 400.0, 220.0 ],
                     "viewvisibility": 1
                 }
             },
@@ -117,8 +141,8 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 367.0, 220.0, 150.0, 20.0 ],
-                    "text": "initialize"
+                    "patching_rect": [ 367.0, 220.0, 292.0, 20.0 ],
+                    "text": "initialize (after init completes, it starts the node.script)"
                 }
             },
             {
@@ -138,15 +162,15 @@
                     "numinlets": 1,
                     "numoutlets": 2,
                     "outlettype": [ "", "" ],
-                    "patching_rect": [ 235.0, 516.0, 272.0, 22.0 ],
+                    "patching_rect": [ 235.0, 451.0, 199.0, 22.0 ],
                     "saved_object_attributes": {
-                        "autostart": 1,
+                        "autostart": 0,
                         "defer": 0,
                         "node_bin_path": "",
                         "npm_bin_path": "",
                         "watch": 1
                     },
-                    "text": "node.script max-bridge.js @autostart 1 @watch 1",
+                    "text": "node.script max-bridge.js @watch 1",
                     "textfile": {
                         "filename": "max-bridge.js",
                         "flags": 0,
@@ -253,17 +277,6 @@
                         "autowatch": 1
                     }
                 }
-            },
-            {
-                "box": {
-                    "id": "obj-1",
-                    "linecount": 15,
-                    "maxclass": "comment",
-                    "numinlets": 1,
-                    "numoutlets": 0,
-                    "patching_rect": [ 27.0, 542.0, 155.0, 208.0 ],
-                    "text": "possible route if the max oscQuery server continues to be clunky (i've noticed i have to restart it sometimes within the preferences pane, which SUCKS). \n\nwrite my own oscQuery server as a node.script. have it be part of a max package that also includes the script above for auto-configuring all UI objects as parameters. "
-                }
             }
         ],
         "lines": [
@@ -311,12 +324,6 @@
             },
             {
                 "patchline": {
-                    "destination": [ "obj-47", 0 ],
-                    "source": [ "obj-4", 0 ]
-                }
-            },
-            {
-                "patchline": {
                     "destination": [ "obj-17", 0 ],
                     "source": [ "obj-42", 0 ]
                 }
@@ -324,13 +331,14 @@
             {
                 "patchline": {
                     "destination": [ "obj-17", 0 ],
-                    "midpoints": [ 244.5, 555.0673828125, 195.632080078125, 555.0673828125, 195.632080078125, 358.70172119140625, 244.5, 358.70172119140625 ],
+                    "midpoints": [ 244.5, 485.169921875, 195.632080078125, 485.169921875, 195.632080078125, 358.70172119140625, 244.5, 358.70172119140625 ],
                     "source": [ "obj-47", 0 ]
                 }
             },
             {
                 "patchline": {
                     "destination": [ "obj-2", 0 ],
+                    "midpoints": [ 424.5, 499.1114501953125, 244.5, 499.1114501953125 ],
                     "source": [ "obj-47", 1 ]
                 }
             }

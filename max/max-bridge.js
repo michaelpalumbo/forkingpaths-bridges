@@ -12,7 +12,8 @@ const ws = new WebSocket("ws://localhost:3001");
 ws.on("open", () => {
   console.log("✅ Connected to WebSocket server on port 3001");
 
-
+  // request current parameter state from patcher
+  Max.outlet('getParamStates')
 });
 
 // Fired when a message is received
@@ -58,6 +59,13 @@ Max.addHandler("bang", () => {
 // Use the 'outlet' function to send messages out of node.script's outlet
 Max.addHandler("paramUpdate", (msg) => {
 	// Max.post(msg);
+
+  ws.send(msg);
+});
+
+// Use the 'outlet' function to send messages out of node.script's outlet
+Max.addHandler("cachedState", (msg) => {
+	Max.post(msg);
 
   ws.send(msg);
 });

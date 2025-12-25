@@ -31,6 +31,8 @@ function initNamespaceWatcher() {
     refreshNamespace();
 
     watchvalues()
+
+    outlet(0, 'script', 'start')
 }
 
 // Call this any time you want a fresh list
@@ -139,6 +141,26 @@ function dumpvalues() {
         post(name + " : " + v + "\n");
     }
     post("-----------------------------------\n");
+}
+
+// return cached values to node.script
+function getParamStates() {
+    var keys = Object.keys(paramListeners);
+    keys.sort();
+
+    let cachedState = {}
+    for (var i = 0; i < keys.length; i++) {
+        var name = keys[i];
+        // cachedState[name] = null
+        cachedState[name] = getvalue(name)
+        // var v = getvalue(name); // refreshes cache if possible
+        // post(name + " : " + v + "\n");
+    }
+    let obj = {
+        cmd: "maxCachedState",
+        data: cachedState
+    }
+    outlet(0, 'cachedState', JSON.stringify(obj))
 }
 
 // Get a single param value (live if possible, else cached, else null)
@@ -391,23 +413,18 @@ function applyObject(obj) {
 function applydict(dictName) {
     try {
         var d = new Dict(dictName);
-        var keys = d.getkeys(); // array of keys, or null if empty
 
-        if (!keys || !keys.length) {
-            post("applydict: dict is empty or missing keys.\n");
-            return;
-        }
+        // Get full JSON string from the dict
+        var json = d.stringify();
 
-        for (var i = 0; i < keys.length; i++) {
-            var k = keys[i];
-            var v = d.get(k); // value for that key
-            setParamValue(k, v);
-        }
+        // Convert to a plain JS object (literal keys, brackets preserved)
+        var obj = JSON.parse(json);
+
+        applyParamObject(obj);
     } catch (e) {
         post("applydict failed: " + e + "\n");
     }
 }
-
 
 function applyParamObject(obj) {
     if (!obj || typeof obj !== "object") {
@@ -417,19 +434,63 @@ function applyParamObject(obj) {
 
     var keys = Object.keys(obj);
 
-    // Optional: you can guard against feedback loops:
-    // - set listeners silent while applying
-    // - or just rely on your l.silent usage in setParamValue
     for (var i = 0; i < keys.length; i++) {
         var paramName = keys[i];
         var value = obj[paramName];
 
-        // If your dict contains nested objects, skip or handle here
+        // skip nested objects (but allow arrays)
         if (value && typeof value === "object" && !Array.isArray(value)) {
             post("Skipping nested object param '" + paramName + "'\n");
             continue;
         }
-        post(paramName, value)
+
         setParamValue(paramName, value);
     }
 }
+
+
+// function applydict(dictName) {
+//     try {
+//         var d = new Dict(dictName);
+//         var keys = d.getkeys(); // array of keys, or null if empty
+
+//         if (!keys || !keys.length) {
+//             post("applydict: dict is empty or missing keys.\n");
+//             return;
+//         }
+
+//         for (var i = 0; i < keys.length; i++) {
+//             var k = keys[i];
+//             var v = d.get(k); // value for that key
+//             setParamValue(k, v);
+//         }
+//     } catch (e) {
+//         post("applydict failed: " + e + "\n");
+//     }
+// }
+
+
+// function applyParamObject(obj) {
+//     if (!obj || typeof obj !== "object") {
+//         post("applyParamObject: expected an object\n");
+//         return;
+//     }
+
+//     var keys = Object.keys(obj);
+
+//     // Optional: you can guard against feedback loops:
+//     // - set listeners silent while applying
+//     // - or just rely on your l.silent usage in setParamValue
+//     for (var i = 0; i < keys.length; i++) {
+//         var paramName = keys[i];
+//         var value = obj[paramName];
+        
+//         // If your dict contains nested objects, skip or handle here
+//         if (value && typeof value === "object" && !Array.isArray(value)) {
+//             post("Skipping nested object param '" + paramName + "'\n");
+//             continue;
+//         }
+//         post(paramName, value)
+//         setParamValue(paramName, value);
+//     }
+// }
