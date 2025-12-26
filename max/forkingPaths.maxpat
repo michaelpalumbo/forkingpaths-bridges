@@ -19,7 +19,6 @@
                     "numinlets": 1,
                     "numoutlets": 0,
                     "patching_rect": [ 826.5, 315.0, 151.0, 60.0 ],
-                    "presentation_linecount": 4,
                     "text": "Post-docs: ask Joel about doing one at uVic on FP2. Maybe show him what you've achieved? "
                 }
             },
@@ -30,8 +29,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 898.0, 42.0, 150.0, 194.0 ],
-                    "presentation_linecount": 14,
+                    "patching_rect": [ 898.0, 42.0, 151.0, 194.0 ],
                     "text": "this is WAY down the line, but consider be able to add multiple instances of the fp. objects (and other bridges for other apps) and have the FP2 app be able to either handle them altogether, or view their changes as separate graphs. would need to some finessing esp if they don't have all bridges open from a previous session, etc.  "
                 }
             },
@@ -113,17 +111,6 @@
                         "parameter_mappable": 0
                     },
                     "text": "dict paramRecalls"
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-12",
-                    "linecount": 3,
-                    "maxclass": "comment",
-                    "numinlets": 1,
-                    "numoutlets": 0,
-                    "patching_rect": [ 232.5, 15.0, 150.0, 47.0 ],
-                    "text": "TODO; need re-connecting ws for node script"
                 }
             },
             {
@@ -217,7 +204,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 17.0, 15.0, 155.0, 208.0 ],
+                    "patching_rect": [ 17.0, 15.0, 156.0, 208.0 ],
                     "text": "HOW TO USE:\n\n1. drop this object into any max patch\n2. select the UI objects in your patch that you want to expose to Forking Paths by:\n\n2.1. Open the inspector for a given UI object. \n2.2. Set \"Parameter Mode Enable\" to true\n2.3. repeat for all desired UI objects"
                 }
             },
@@ -263,18 +250,6 @@
                     "outlettype": [ "" ],
                     "patching_rect": [ 307.0, 219.0, 58.0, 22.0 ],
                     "text": "loadbang"
-                }
-            },
-            {
-                "box": {
-                    "comment": "",
-                    "id": "obj-31",
-                    "index": 0,
-                    "maxclass": "inlet",
-                    "numinlets": 0,
-                    "numoutlets": 1,
-                    "outlettype": [ "" ],
-                    "patching_rect": [ 235.0, 288.0, 30.0, 30.0 ]
                 }
             },
             {
@@ -338,12 +313,6 @@
             {
                 "patchline": {
                     "destination": [ "obj-17", 0 ],
-                    "source": [ "obj-31", 0 ]
-                }
-            },
-            {
-                "patchline": {
-                    "destination": [ "obj-17", 0 ],
                     "source": [ "obj-33", 0 ]
                 }
             },
@@ -374,7 +343,6 @@
                 }
             }
         ],
-        "autosave": 0,
         "oscreceiveudpport": 0
     }
 }

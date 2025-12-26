@@ -4,47 +4,100 @@ import path from "path";
 import Max from "max-api";
 import WebSocket from "ws";
 
-console.log("test")
+let isConnecting = false;
+let ws; 
+
+function connect() {
+  if (isConnecting) return;
+  isConnecting = true;
+
+  console.log(`🔄 Attempting to connect to "ws://localhost:3001"...`);
+  ws = new WebSocket("ws://localhost:3001");
+
+  ws.on("open", () => {
+    isConnecting = false;
+    console.log("✅ Connected to WebSocket server on port 3001");
+    ws.send(JSON.stringify({
+      cmd: "maxBridgeIsReady"
+    }))
+    // request current parameter state from patcher
+    Max.outlet('getParamStates');
+  });
+
+  ws.on("message", (data) => {
+    try {
+      let msg = JSON.parse(data);
+      switch(msg.cmd){
+        case 'maxStateRecall':
+          Max.setDict("paramRecalls", msg.data);
+          Max.outlet("applydict", "paramRecalls");
+          break;
+        default: 
+          console.log('no switch case for msg', msg.cmd);
+      }
+    } catch (e) {
+      console.error("Error parsing JSON:", e);
+    }
+  });
+
+  ws.on("error", (err) => {
+    // We don't need to trigger reconnect here because 'close' always follows 'error'
+    console.error("❌ WebSocket error:", err.message);
+  });
+
+  ws.on("close", (code, reason) => {
+    isConnecting = false;
+    console.log(`🔌 Connection closed. Retrying in 1s...`);
+    
+    // Trigger the retry
+    setTimeout(() => {
+      connect();
+    }, 1000);
+  });
+}
+
+// Start the initial connection
+connect();
 // Create a connection to your WS server
-const ws = new WebSocket("ws://localhost:3001");
+// const ws = new WebSocket("ws://localhost:3001");
 
-// Fired when the connection opens
-ws.on("open", () => {
-  console.log("✅ Connected to WebSocket server on port 3001");
+// // Fired when the connection opens
+// ws.on("open", () => {
+//   console.log("✅ Connected to WebSocket server on port 3001");
 
-  // request current parameter state from patcher
-  Max.outlet('getParamStates')
-});
+//   // request current parameter state from patcher
+//   Max.outlet('getParamStates')
+// });
 
-// Fired when a message is received
-ws.on("message", (data) => {
-  // console.log("📩 Message from server:", data.toString());
-  let msg = JSON.parse(data)
+// // Fired when a message is received
+// ws.on("message", (data) => {
+//   // console.log("📩 Message from server:", data.toString());
+//   let msg = JSON.parse(data)
   
 
-  switch(msg.cmd){
-    case 'maxStateRecall':
-      Max.post(msg)
-      Max.setDict("paramRecalls", msg.data);
-      Max.outlet("applydict", "paramRecalls");
+//   switch(msg.cmd){
+//     case 'maxStateRecall':
+//       Max.post(msg)
+//       Max.setDict("paramRecalls", msg.data);
+//       Max.outlet("applydict", "paramRecalls");
 
-      // sendParamBatch(msg.data);
+//       // sendParamBatch(msg.data);
       
-    break;
+//     break;
 
-    default: console.log('no switch case for msg', msg.cmd)
-  }
-});
+//     default: console.log('no switch case for msg', msg.cmd)
+//   }
+// });
 
-// Fired on error
-ws.on("error", (err) => {
-  console.error("❌ WebSocket error:", err);
-});
+// // Fired on error
+// ws.on("error", (err) => {
+//   console.error("❌ WebSocket error:", err);
+// });
 
-// Fired when the connection closes
-ws.on("close", (code, reason) => {
-  console.log(`🔌 Connection closed (${code})`, reason?.toString());
-});
+// // Fired when the connection closes
+// ws.on("close", (code, reason) => {
+//   console.log(`🔌 Connection closed (${code})`, reason?.toString());
+// });
 
 
 
@@ -65,7 +118,7 @@ Max.addHandler("paramUpdate", (msg) => {
 
 // Use the 'outlet' function to send messages out of node.script's outlet
 Max.addHandler("cachedState", (msg) => {
-	Max.post(msg);
+	
 
   ws.send(msg);
 });
