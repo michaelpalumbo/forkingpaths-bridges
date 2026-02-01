@@ -13,56 +13,13 @@
         "boxes": [
             {
                 "box": {
-                    "bgcolor": [ 0.20784313725490197, 0.43137254901960786, 0.7607843137254902, 1.0 ],
-                    "bgcolor2": [ 0.172137149796092, 0.172137100044002, 0.172137113045018, 1.0 ],
-                    "bgfillcolor_angle": 270.0,
-                    "bgfillcolor_autogradient": 0.0,
-                    "bgfillcolor_color": [ 0.20784313725490197, 0.43137254901960786, 0.7607843137254902, 1.0 ],
-                    "bgfillcolor_color1": [ 0.20784313725490197, 0.43137254901960786, 0.7607843137254902, 1.0 ],
-                    "bgfillcolor_color2": [ 0.172137149796092, 0.172137100044002, 0.172137113045018, 1.0 ],
-                    "bgfillcolor_proportion": 0.5,
-                    "bgfillcolor_type": "gradient",
-                    "gradient": 1,
-                    "id": "obj-27",
-                    "maxclass": "message",
-                    "numinlets": 2,
-                    "numoutlets": 1,
-                    "outlettype": [ "" ],
-                    "patching_rect": [ 482.0, 371.0, 98.0, 22.0 ],
-                    "text": "script npm install"
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-24",
-                    "maxclass": "message",
-                    "numinlets": 2,
-                    "numoutlets": 1,
-                    "outlettype": [ "" ],
-                    "patching_rect": [ 403.0, 371.0, 64.0, 22.0 ],
-                    "text": "script start"
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-22",
-                    "linecount": 2,
-                    "maxclass": "comment",
-                    "numinlets": 1,
-                    "numoutlets": 0,
-                    "patching_rect": [ 302.5, 190.0, 215.0, 33.0 ],
-                    "text": "<< list: 'ws <ip address>' to connect to a different computer"
-                }
-            },
-            {
-                "box": {
-                    "id": "obj-12",
+                    "id": "obj-21",
                     "maxclass": "newobj",
-                    "numinlets": 1,
-                    "numoutlets": 6,
-                    "outlettype": [ "signal", "bang", "int", "float", "", "" ],
-                    "patching_rect": [ 226.0, 168.0, 71.5, 22.0 ],
-                    "text": "typeroute~"
+                    "numinlets": 2,
+                    "numoutlets": 2,
+                    "outlettype": [ "bang", "" ],
+                    "patching_rect": [ 307.0, 179.0, 54.0, 22.0 ],
+                    "text": "sel bang"
                 }
             },
             {
@@ -260,7 +217,7 @@
                     "numinlets": 0,
                     "numoutlets": 1,
                     "outlettype": [ "bang" ],
-                    "patching_rect": [ 226.0, 127.0, 30.0, 30.0 ]
+                    "patching_rect": [ 307.0, 131.0, 30.0, 30.0 ]
                 }
             },
             {
@@ -368,7 +325,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 402.0, 36.0, 151.0, 127.0 ],
+                    "patching_rect": [ 409.0, 42.0, 151.0, 127.0 ],
                     "text": "TODO: eventually, see about writing a v8 script that observes all changes made to a Patcher. if you can get that to work, then fuck it, you could add forking paths-style version control to a fucking max patch"
                 }
             },
@@ -379,7 +336,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 232.0, 15.0, 151.0, 100.0 ],
+                    "patching_rect": [ 203.0, 22.0, 151.0, 100.0 ],
                     "text": "TODO: with this implementation, you can also write a Max 8 version as well (using [js] object instead. love that this project can be backwards compatible)"
                 }
             },
@@ -467,7 +424,7 @@
                     "maxclass": "comment",
                     "numinlets": 1,
                     "numoutlets": 0,
-                    "patching_rect": [ 296.25, 231.0, 292.0, 20.0 ],
+                    "patching_rect": [ 367.0, 220.0, 292.0, 20.0 ],
                     "text": "initialize (after init completes, it starts the node.script)"
                 }
             },
@@ -488,15 +445,17 @@
                     "numinlets": 1,
                     "numoutlets": 2,
                     "outlettype": [ "", "" ],
-                    "patching_rect": [ 235.0, 451.0, 199.0, 22.0 ],
+                    "patching_rect": [ 235.0, 451.0, 223.0, 22.0 ],
                     "saved_object_attributes": {
                         "autostart": 0,
                         "defer": 0,
+                        "node_bin_path": "",
+                        "npm_bin_path": "",
                         "watch": 1
                     },
-                    "text": "node.script max-bridge.js @watch 1",
+                    "text": "node.script max-bridge-rust.js @watch 1",
                     "textfile": {
-                        "filename": "max-bridge.js",
+                        "filename": "max-bridge-rust.js",
                         "flags": 0,
                         "embed": 0,
                         "autowatch": 1
@@ -554,7 +513,7 @@
                     "numinlets": 2,
                     "numoutlets": 1,
                     "outlettype": [ "" ],
-                    "patching_rect": [ 236.25, 230.0, 58.0, 22.0 ],
+                    "patching_rect": [ 307.0, 219.0, 58.0, 22.0 ],
                     "text": "loadbang"
                 }
             },
@@ -594,19 +553,6 @@
         "lines": [
             {
                 "patchline": {
-                    "destination": [ "obj-33", 0 ],
-                    "source": [ "obj-12", 1 ]
-                }
-            },
-            {
-                "patchline": {
-                    "destination": [ "obj-47", 0 ],
-                    "midpoints": [ 288.0, 213.0, 222.0, 213.0, 222.0, 438.0, 244.5, 438.0 ],
-                    "source": [ "obj-12", 5 ]
-                }
-            },
-            {
-                "patchline": {
                     "destination": [ "obj-14", 0 ],
                     "source": [ "obj-13", 0 ]
                 }
@@ -631,8 +577,15 @@
             },
             {
                 "patchline": {
+                    "destination": [ "obj-33", 0 ],
+                    "source": [ "obj-21", 0 ]
+                }
+            },
+            {
+                "patchline": {
                     "destination": [ "obj-47", 0 ],
-                    "source": [ "obj-24", 0 ]
+                    "midpoints": [ 351.5, 204.0, 167.330810546875, 204.0, 167.330810546875, 438.0, 244.5, 438.0 ],
+                    "source": [ "obj-21", 1 ]
                 }
             },
             {
@@ -640,12 +593,6 @@
                     "destination": [ "obj-17", 0 ],
                     "midpoints": [ 30.5, 678.0, 222.0, 678.0, 222.0, 358.08624267578125, 244.5, 358.08624267578125 ],
                     "source": [ "obj-25", 0 ]
-                }
-            },
-            {
-                "patchline": {
-                    "destination": [ "obj-47", 0 ],
-                    "source": [ "obj-27", 0 ]
                 }
             },
             {
@@ -675,14 +622,14 @@
             {
                 "patchline": {
                     "destination": [ "obj-17", 0 ],
-                    "midpoints": [ 244.5, 483.0, 206.4007568359375, 483.0, 206.4007568359375, 361.0, 244.5, 361.0 ],
+                    "midpoints": [ 244.5, 485.169921875, 195.632080078125, 485.169921875, 195.632080078125, 358.70172119140625, 244.5, 358.70172119140625 ],
                     "source": [ "obj-47", 0 ]
                 }
             },
             {
                 "patchline": {
                     "destination": [ "obj-2", 0 ],
-                    "midpoints": [ 424.5, 499.1114501953125, 244.5, 499.1114501953125 ],
+                    "midpoints": [ 448.5, 499.1114501953125, 244.5, 499.1114501953125 ],
                     "source": [ "obj-47", 1 ]
                 }
             },
@@ -700,7 +647,7 @@
             },
             {
                 "patchline": {
-                    "destination": [ "obj-12", 0 ],
+                    "destination": [ "obj-21", 0 ],
                     "source": [ "obj-9", 0 ]
                 }
             }

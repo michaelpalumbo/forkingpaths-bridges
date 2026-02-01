@@ -1,15 +1,9 @@
 outlets = 1
 
+let currentParam = false;
 
-function bang() {
-    var pclass = this.patcher.parentpatcher;
-    if (pclass) {
-        post("The parent patcher class is " + pclass.name);
-        post(`OSC route will be /${pclass.name}`)
-    } else {
-        post("This is a top-level patcher");
-    }
-}
+let parent = this.patcher.parentpatcher.name
+outlet(0, 'patcherName', parent)
 
 // Max JS (js object in Max)
 
@@ -19,6 +13,16 @@ var pip = null;
 var currentNames = []; // our last known snapshot
 
 function loadbang() {
+    var pclass = this.patcher.parentpatcher;
+    if (pclass) {
+        post("The parent patcher class is " + pclass.name);
+        post(`OSC route will be /${pclass.name}`)
+        parent = pclass.name
+        outlet(0, 'patcherName', parent)
+    } else {
+        post("This is a top-level patcher");
+    }
+
     initNamespaceWatcher();
 }
 
@@ -157,9 +161,11 @@ function getParamStates() {
         // post(name + " : " + v + "\n");
     }
     let obj = {
-        cmd: "maxCachedState",
-        data: cachedState
+        cmd: "keyFrame",
+        data: cachedState,
+        parent: this.patcher.parentpatcher.name
     }
+
     outlet(0, 'cachedState', JSON.stringify(obj))
 }
 
@@ -216,6 +222,7 @@ function ensureValueListener(paramName) {
     }
 }
 
+
 // Callback for any watched param value change
 function valuechanged(data) {
     // data.listener is the MaxobjListener instance
@@ -231,11 +238,36 @@ function valuechanged(data) {
     // post("VALUE CHANGED: " + name + " -> " + v + "\n");
 
     let obj = {
-        cmd: "maxParamUpdate",
+        cmd: "paramUpdate",
         param: name, 
-        value: v
+        value: v,
+        parent: parent
     }
     outlet(0, 'paramUpdate', JSON.stringify(obj));
+
+    currentParam = name
+   
+}
+
+function endGesture(){
+    post('note: see github issue #71')
+    
+    /*
+    if(currentParam){
+        
+        
+        let obj = {
+            cmd: "paramUpdate",
+            param: currentParam, 
+            value: 'endGesture',
+            parent: parent
+        }
+        
+        outlet(0, 'paramUpdate', JSON.stringify(obj));
+        // reset
+        currentParam = false
+    }
+        */
 }
 
 
@@ -275,7 +307,7 @@ function removeValueListener(paramName) {
 
 function set() {
     if (arguments.length < 2) {
-        post("usage: set <paramName> <value...>\n");
+    
         return;
     }
 
@@ -311,7 +343,7 @@ function setParamValue(paramName, value) {
         // Update cache immediately
         paramValues[paramName] = value;
 
-        post("SET: " + paramName + " -> " + value + "\n");
+  
     } catch (e) {
         post("Failed to set " + paramName + ": " + e + "\n");
     }
@@ -350,7 +382,7 @@ function anything() {
 
 function applyjson() {
     if (arguments.length < 1) {
-        post("usage: applyjson <json-string>\n");
+       
         return;
     }
 
@@ -446,6 +478,11 @@ function applyParamObject(obj) {
 
         setParamValue(paramName, value);
     }
+}
+
+function gesturePlayBack(param, value){
+    // post('playback', param, value)
+    setParamValue(param, value);
 }
 
 

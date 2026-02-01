@@ -8,30 +8,22 @@ let isConnecting = false;
 let ws; 
 let parentName;
 
-let wsAddress = "ws://steve:3001"
 
-// once script is running, send bang to get creation arguments (if any)
-Max.outlet('getCreationArgs')
 
-function connect(ip) {
+function connect() {
   if (isConnecting) return;
   isConnecting = true;
 
-    // set remote ip address
-    if (ip){
-        wsAddress = `ws://${ip}:3001`
-    }
-    
-    console.log(`🔄 Attempting to connect to "ws://localhost:3001"...`);
-  ws = new WebSocket(wsAddress);
+  console.log(`🔄 Attempting to connect to "ws://localhost:3001"...`);
+  ws = new WebSocket("ws://localhost:3001/ws");
 
   ws.on("open", () => {
     isConnecting = false;
     console.log("✅ Connected to WebSocket server on port 3001");
-    ws.send(JSON.stringify({
-      cmd: "maxBridgeIsReady",
-      data: parentName
-    }))
+//    ws.send(JSON.stringify({
+  //    cmd: "maxBridgeIsReady",
+    //  data: parentName
+ //   }))
     // request current parameter state from patcher
     Max.outlet('getParamStates');
   });
@@ -39,8 +31,9 @@ function connect(ip) {
   ws.on("message", (data) => {
     try {
       let msg = JSON.parse(data);
+      Max.post(msg)
       switch(msg.cmd){
-        case 'maxStateRecall':
+        case 'recallState':
           Max.setDict("paramRecalls", msg.data);
           Max.outlet("applydict", "paramRecalls");
         break;
@@ -78,7 +71,7 @@ function connect(ip) {
 }
 
 // Start the initial connection
-connect('localhost');
+connect();
 
 
 // Use the 'outlet' function to send messages out of node.script's outlet
@@ -88,7 +81,8 @@ Max.addHandler("paramUpdate", (msg) => {
 });
 
 Max.addHandler('endGesture', (msg) =>{
-  ws.send(msg);
+  // ws.send(msg);
+  Max.post('note: see github issue #71')
 })
 
 // send current full state
@@ -104,31 +98,9 @@ Max.addHandler('patcherName', (pname) =>{
   parentName = pname
 })
 
-
-Max.addHandler('wsAddress', (address) =>{
-    
-    connect(address)
-    
-    })
-
-
-
-// Max.addHandler("endGesture", () => {
-//   ws.send('endGesture');
-// });
-
-
-// async function sendParamBatch(updates) {
-  
-//   // updates is a normal JS object like:
-//   // { "multislider": [ ... ], "slider": 50, "slider[1]": 28 }
-
-//   // Write into a named Max dict
-//   await 
-
-  
-
-//   // Tell the v8 js object to apply it
-//   // (assuming you patch the node.script outlet to the v8 object's inlet)
-  
-// }
+Max.addHandler('seek', (direction) =>{
+    ws.send(JSON.stringify({
+        cmd: "seek",
+        data: direction
+    }));
+})
