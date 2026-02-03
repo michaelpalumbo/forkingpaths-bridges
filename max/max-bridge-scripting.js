@@ -148,7 +148,7 @@ function dumpvalues() {
 }
 
 // return cached values to node.script
-function getParamStates() {
+function getKeyframe() {
     var keys = Object.keys(paramListeners);
     keys.sort();
 

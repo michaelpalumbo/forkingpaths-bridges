@@ -33,7 +33,7 @@ function connect(ip) {
       data: parentName
     }))
     // request current parameter state from patcher
-    Max.outlet('getParamStates');
+    Max.outlet('getKeyframe');
   });
 
   ws.on("message", (data) => {
@@ -49,9 +49,9 @@ function connect(ip) {
           Max.outlet("gesturePlayBack", msg.data.param, msg.data.value);
         break
 
-        case 'getParamStates':
+        case 'getKeyframe':
           // request current parameter state from patcher
-          Max.outlet('getParamStates');
+          Max.outlet('getKeyframe');
         break
         default: 
           console.log('no switch case for msg', msg.cmd);

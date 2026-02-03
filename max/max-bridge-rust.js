@@ -25,7 +25,7 @@ function connect() {
     //  data: parentName
  //   }))
     // request current parameter state from patcher
-    Max.outlet('getParamStates');
+    Max.outlet('getKeyframe');
   });
 
   ws.on("message", (data) => {
@@ -42,9 +42,9 @@ function connect() {
           Max.outlet("gesturePlayBack", msg.data.param, msg.data.value);
         break
 
-        case 'getParamStates':
+        case 'getKeyframe':
           // request current parameter state from patcher
-          Max.outlet('getParamStates');
+          Max.outlet('getKeyframe');
         break
         default: 
           console.log('no switch case for msg', msg.cmd);
@@ -87,8 +87,6 @@ Max.addHandler('endGesture', (msg) =>{
 
 // send current full state
 Max.addHandler("cachedState", (msg) => {
-	
-
   ws.send(msg);
 });
 
